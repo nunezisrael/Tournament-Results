@@ -4,7 +4,9 @@ The main file contaning all the methods used to find and arrange the swiss pairs
 
 The main file containning the database schema is called "tournament.sql"
 
-The file were actual tournament is played is called, "game.py"
+The file were an actual tournament is played is called, "game.py"
+
+The test suite where all test scripts for the project reside is called "tournament_test.py"
 
 
 The following functions are within the file "tournament.py" and their usage.
@@ -54,3 +56,5 @@ Once all the players are entered the total number of players registers is obtain
 
 After each round is played the program will output the swiss pairings created and the match winner per match. Once the entire tournament runs the program also indicates the winner of the tournament, whom corresponds to the player with the most "wins."
 
+
+The file "tournament_test.py" contains a series of test scripts that were used in order to create the program. When "tournament_test.py" runs it tests all the functions contained in "tournament.py" and successfully passes all the tests.
