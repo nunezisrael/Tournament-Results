@@ -10,27 +10,38 @@ create database tournament;
 
 \c tournament;
 	
+<<<<<<< HEAD
 drop table if exists players cascade;
 	
+=======
+>>>>>>> origin/master
 create table if not exists players (
 id serial primary key unique not null, 
 fullname text not null);
 
+<<<<<<< HEAD
 drop table if exists matches cascade;
 
+=======
+>>>>>>> origin/master
 create table if not exists matches(
 matchid serial primary key unique, 
 matchNumber serial,
 firstplayerid integer references players (id) ON DELETE CASCADE, 
 secondplayerid integer references players (id) ON DELETE CASCADE);
 
+<<<<<<< HEAD
 drop table if exists playerstandings cascade;
 
 create table if not exists playerstandings(
+=======
+create table if not exists playerStandings (
+>>>>>>> origin/master
 playerid integer REFERENCES players(id) ON DELETE CASCADE, 
 wins integer DEFAULT 0, 
 matches integer DEFAULT 0);
 
+<<<<<<< HEAD
 drop table if exists byestatus cascade;
 
 create table if not exists byestatus (
@@ -52,3 +63,8 @@ create view byeplayer as
     order by p.wins, b.bye desc;
 
 
+=======
+create table if not exists byestatus (
+playerid integer references players (id) ON DELETE CASCADE,
+bye integer DEFAULT 0 CONSTRAINT single_bye CHECK (bye < 2));
+>>>>>>> origin/master

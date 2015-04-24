@@ -1,22 +1,38 @@
 import tournament
 import math
+<<<<<<< HEAD
 import bleach
 
 print "Do you want clear previous tournament history? \n y = Yes \n n = No"
 tdelete = str(bleach.clean(raw_input('==>')))
 if tdelete == 'y':
     print "All tables wiped!"
+=======
+
+
+print "do you want to clear the tournamemt? \n y = Yes \n n = No"
+tdelete = str(raw_input('==>'))
+if tdelete == 'y':
+>>>>>>> origin/master
     tournament.deleteMatches()
     tournament.deletePlayers()
 elif tdelete == 'n':
     print "tournament unchanged!"
 #Entering players into the tournament
 print "Enter number of players"
+<<<<<<< HEAD
 players = int(bleach.clean(raw_input('==>')))
 
 for i in range(players):
     print "Enter player's fullname"
     player = str(bleach.clean(raw_input()))
+=======
+players = int(raw_input('==>'))
+
+for i in range(players):
+    print "Enter player's fullname"
+    player = str(raw_input())
+>>>>>>> origin/master
     tournament.registerPlayer(player)
     print "Player "+ player +" is registered for the tournament "
 
@@ -57,7 +73,11 @@ while rounds < total_rounds:
         winner = tournament.playerStandings()[0][1]
         second_place = tournament.playerStandings()[1][1]
         loser = tournament.playerStandings()[total_players-1][1]
+<<<<<<< HEAD
         print "TOURNAMENT WINNER is "+str(winner)
+=======
+        print "WINNER is "+str(winner)
+>>>>>>> origin/master
         #print "second place is "+str(second_place)+"\n  and loser is "+str(loser)
 
 

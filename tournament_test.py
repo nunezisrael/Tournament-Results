@@ -124,6 +124,7 @@ def testPairings():
             "After one match, players with one win should be paired.")
     print "8. After one match, players with one win are paired."
 
+<<<<<<< HEAD
 def testOddplayers():
     deleteMatches()
     deletePlayers()
@@ -147,6 +148,8 @@ def testOddplayers():
                 "No player should receive more than ONE bye per tournament.")
     print "9. Odd number of players are paired and no one received more than on bye."
     
+=======
+>>>>>>> origin/master
 
 if __name__ == '__main__':
     testDeleteMatches()
@@ -157,7 +160,10 @@ if __name__ == '__main__':
     testStandingsBeforeMatches()
     testReportMatches()
     testPairings()
+<<<<<<< HEAD
     testOddplayers()
+=======
+>>>>>>> origin/master
     print "Success!  All tests pass!"
 
 
