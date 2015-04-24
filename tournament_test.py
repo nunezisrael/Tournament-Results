@@ -124,6 +124,29 @@ def testPairings():
             "After one match, players with one win should be paired.")
     print "8. After one match, players with one win are paired."
 
+def testOddplayers():
+    deleteMatches()
+    deletePlayers()
+    registerPlayer("Mia Canis")
+    registerPlayer("Pooky")
+    registerPlayer("Coke")
+    registerPlayer("Blueberry Pie")
+    registerPlayer("Keather Jules")
+    standings = playerStandings()
+    [id1, id2, id3, id4, id5] = [row[0] for row in standings]
+    reportMatch(id1, id2)
+    reportMatch(id3, id4)
+    pairings = swissPairings()
+    if len(pairings)%2 != 0:
+        print "Odd number of players registered!"
+    byes = DB('select bye from byestatus',None,None,1)
+    wins = [row[0] for row in byes]
+    for w in wins:
+        if w> 1:
+            raise ValueError(
+                "No player should receive more than ONE bye per tournament.")
+    print "9. Odd number of players are paired and no one received more than on bye."
+    
 
 if __name__ == '__main__':
     testDeleteMatches()
@@ -134,6 +157,7 @@ if __name__ == '__main__':
     testStandingsBeforeMatches()
     testReportMatches()
     testPairings()
+    testOddplayers()
     print "Success!  All tests pass!"
 
 

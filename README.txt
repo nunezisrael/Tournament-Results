@@ -13,11 +13,16 @@ Functions
 ---------
 The following functions are within the file "tournament.py" and their usage.
 
-connect():
-Creates a connection to the DB and make it available for any other function.
+connect(QUERY,arg1,arg2,result):
+Creates a connection to the DB and takes parameters for the query to be executed. 
+
+-QUERY = the postgresql query passed to the DB.
+-arg1 = additional argument that will be passed to the "execute" command when the QUERY is evaluated.
+-arg2 = additional argument that will be passed to the "execute" command when the QUERY is evaluated.
+-result = fetches all the row from the query ran. Will be executed only when it is not equal to "None".
 
 deleteMatches():
-Deletes all records from the matches table and resets the match sequence. This function is used to remove all match information when a new tournament is started.
+Deletes all records from the matches table and resets the match sequence. This function is used to remove all match information when a new tournament is started. The match number is reset each time the tournament is clear as a check to test "total matches played."
 
 deletePlayers():
 Deletes all records from the players table. This function is used to remove all the player information when a new tournament is started.
@@ -43,9 +48,16 @@ Data Base Schema
 The file "tournament.sql" containts the following tables and their definitions:
 
 Players - stores players registered for the tournament
-Matches - stores match played between two players
+Matches - stores match played between two players, used to view the history of the tournament
 playerStandings - keeps track of the current standings of each player per match
 bye - keeps track of the "bye" each player has received.
+
+The following views are also created:
+
+pairs - joins the players and the playerstandings table and sorts it by wins (descending) and matches. Used to create the swiss pairs
+
+byeplayer - joins the byestatus and the playerstandings tables and sorts it by wins and bye's received, restricted on to only return those players wihout any bye's. Used to find a player who never received a bye when there are odd number of players.
+
 
 Game environment
 ----------------
@@ -80,4 +92,4 @@ If "N" is entered ALL table date is preserved and the tournament will be ran wit
 Test Scripts
 ------------
 
-The file "tournament_test.py" contains a series of test scripts that were used in order to create the program. When "tournament_test.py" runs it tests all the functions contained in "tournament.py" and successfully passes all the tests.
+The file "tournament_test.py" contains a series of test scripts that were used in order to properly create the program. When "tournament_test.py" runs it tests all the potential scenarios that are supposed to be successfull and checks wheter these passed or not.functions contained in "tournament.py" and successfully passes all the tests.

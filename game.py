@@ -1,8 +1,9 @@
 import tournament
 import math
+import bleach
 
 print "Do you want clear previous tournament history? \n y = Yes \n n = No"
-tdelete = str(raw_input('==>'))
+tdelete = str(bleach.clean(raw_input('==>')))
 if tdelete == 'y':
     print "All tables wiped!"
     tournament.deleteMatches()
@@ -11,11 +12,11 @@ elif tdelete == 'n':
     print "tournament unchanged!"
 #Entering players into the tournament
 print "Enter number of players"
-players = int(raw_input('==>'))
+players = int(bleach.clean(raw_input('==>')))
 
 for i in range(players):
     print "Enter player's fullname"
-    player = str(raw_input())
+    player = str(bleach.clean(raw_input()))
     tournament.registerPlayer(player)
     print "Player "+ player +" is registered for the tournament "
 
