@@ -1,131 +1,38 @@
 Swiss Tournament Pairings
-<<<<<<< HEAD
 -------------------------
 
-The main file contaning all the methods used to find and arrange the swiss pairs, this is called "tournament.py". 
-=======
+The main file containing all the methods used to find and arrange the swiss pairs, this is called "tournament.py". 
 
-The main file contaning all the methods used to find and arrange the swiss pairs is called "tournament.py". 
->>>>>>> origin/master
-
-The main file containning the database schema is called "tournament.sql"
+The main file containing the database schema is called "tournament.sql"
 
 The file were an actual tournament is played is called, "game.py"
 
 The test suite where all test scripts for the project reside is called "tournament_test.py"
 
-<<<<<<< HEAD
-Functions
----------
-The following functions are within the file "tournament.py" and their usage.
-
-connect(QUERY,arg1,arg2,result):
-Creates a connection to the DB and takes parameters for the query to be executed. 
-
--QUERY = the postgresql query passed to the DB.
--arg1 = additional argument that will be passed to the "execute" command when the QUERY is evaluated.
--arg2 = additional argument that will be passed to the "execute" command when the QUERY is evaluated.
--result = fetches all the row from the query ran. Will be executed only when it is not equal to "None".
-
-deleteMatches():
-Deletes all records from the matches table and resets the match sequence. This function is used to remove all match information when a new tournament is started. The match number is reset each time the tournament is clear as a check to test "total matches played."
-=======
-
-The following functions are within the file "tournament.py" and their usage.
-
-connect():
-Creates a connection to the DB and make it available for any other function.
-
-deleteMatches():
-Deletes all records from the matches table and resets the match sequence. This function is used to remove all match information when a new tournament is started.
->>>>>>> origin/master
-
-deletePlayers():
-Deletes all records from the players table. This function is used to remove all the player information when a new tournament is started.
-
-<<<<<<< HEAD
-countPlayers():
-Provides a count of all players registered for the tournament. Used to determined how many rounds should be played until a winner is determined.
-
-registerPlayer(fullname):
-Allows players to be registered into the tournament and populated those tables where a player record is needed/referenced.
-
-playerStandings():
-Provides a list of player current status: wins and matches. This list is used to create the swiss pairs needed for the subsequent rounds; initialy before any match is played and every time after a match is played.
-
-=======
-
-countPlayers():
-Provides a count of all players registered for the tournament. Used to determined how many rounds should be played until a winner is determined.
-
-
-registerPlayer(fullname):
-Allows players to be registered into the tournament and populated those tables where a player record is needed/referenced.
-
-
-playerStandings():
-Provides a list of player current status: wins and matches. This list is used to create the swiss pairs needed for the subsequent rounds; initialy before any match is played and every time after a match is played.
-
-
->>>>>>> origin/master
-reportMatch(winner,loser):
-Function takes two parameters: the first parameter is the winner of the match, the second parameter is the loser of the match. The function will increase the "wins" and "matches" by one for the winner and only increase the "matches" for the loser. This function is used to report the winner and loser of every match played.
-
-swissPairings():
-Function makes use of the playerStandings() method to pair up players next with similar win records. When there is an odd number of players the function will give a "bye" (a win) to the player with the least wins. The function will also check to ensure that no player receives two "byes".
-
-<<<<<<< HEAD
-Data Base Schema
+REQUIRED MODULES
 ----------------
-=======
->>>>>>> origin/master
+-Postgresql => psycopg2
+-math
+-bleach
+-tournament
 
-The file "tournament.sql" containts the following tables and their definitions:
+*All modules are already imported within game.py and tournament.py
 
-Players - stores players registered for the tournament
-<<<<<<< HEAD
-Matches - stores match played between two players, used to view the history of the tournament
-playerStandings - keeps track of the current standings of each player per match
-bye - keeps track of the "bye" each player has received.
-
-The following views are also created:
-
-pairs - joins the players and the playerstandings table and sorts it by wins (descending) and matches. Used to create the swiss pairs
-
-byeplayer - joins the byestatus and the playerstandings tables and sorts it by wins and bye's received, restricted on to only return those players wihout any bye's. Used to find a player who never received a bye when there are odd number of players.
-
-
-Game environment
-----------------
-
-The file "game.py" creates an enviroment for the tournament to be played and makes use of all the functions in "tournament.py" and all the tables on "tournament.sql". The program takes in the several inputs for the user to run the tournament.
-
-=======
-Matches - stores match played between two players
-playerStandings - keeps track of the current standings of each player per match
-bye - keeps track of the "bye" each player has received.
-
-
-The file "game.py" creates an enviroment for the tournament to be played and makes use of all the functions in "tournament.py" and all the tables on "tournament.sql". The program takes in the several inputs for the user to run the tournament.
->>>>>>> origin/master
--When the program is ran, it first asks if the data from previous tournaments should be deleted or not.
--Next the program will ask to enter the number of new players to be added to the tournament, this number is used to prompt the user to enter each player one-at-a-time.
-
-Once all the players are entered the total number of players registers is obtained and used to determine how many rounds should be played until a winner is determined.
-
-After each round is played the program will output the swiss pairings created and the match winner per match. Once the entire tournament runs the program also indicates the winner of the tournament, whom corresponds to the player with the most "wins."
-
-<<<<<<< HEAD
 ********************************************************************************************
 Note the program does not validate user input, i.e. if it asks for number and a character is entered the error thrown is not handled.
 ********************************************************************************************
 
 HOW TO RUN THE TOURNAMENT:
 
+Run and connect to the virtual machine :
+A. vagrant up -> vagrant ssh -> psql -> \i /path to/tournament.sql 
+B. vagrant up -> vagrant ssh -> python tournament.py
+
+execute the script:
 1. Run script game.py
 2. User will be prompted with the following question:
 "Do you want clear previous tournament history?"
-If "Y" is entered then ALL table data deleted i.e. all tables are wiped.
+If "Y" is entered then ALL table data deleted and delete is “cascaded” on dependent tables  i.e. all tables are wiped.
 If "N" is entered ALL table date is preserved and the tournament will be ran with the "OLD DATA" + the "NEW DATA" i.e. if a tournament with 2 players was ran before and the tables are not wiped ("N"), if another player is entered then the tournament will be ran with 3 players.
 3. User will be prompted to, "enter the number of players into the tournament". Depending the on the option selected on step #2, the total number of players register will be ALL previously registered players + any new players entered OR only the newly registered players. The total rounds to be played will be based on the number of total players registered.
 4. The tournament begins:	
@@ -137,8 +44,5 @@ If "N" is entered ALL table date is preserved and the tournament will be ran wit
 Test Scripts
 ------------
 
-The file "tournament_test.py" contains a series of test scripts that were used in order to properly create the program. When "tournament_test.py" runs it tests all the potential scenarios that are supposed to be successfull and checks wheter these passed or not.functions contained in "tournament.py" and successfully passes all the tests.
-=======
+The file "tournament_test.py" contains a series of test scripts that were used in order to properly create the program. When "tournament_test.py" runs it tests all the potential scenarios that are supposed to be successful and checks whether these passed or not.functions contained in "tournament.py" and successfully passes all the tests.
 
-The file "tournament_test.py" contains a series of test scripts that were used in order to create the program. When "tournament_test.py" runs it tests all the functions contained in "tournament.py" and successfully passes all the tests.
->>>>>>> origin/master
