@@ -6,7 +6,7 @@
 import psycopg2
 
 
-def DB(QUERY, arg1, arg2, result):
+def DB(QUERY, arg1=None, arg2=None, result=None):
     """Connects to the PostgreSQL database and executes the query
     QUERY - the actual query executed on the DB
     arg1 - optional value executed with the QUERY.
@@ -30,32 +30,34 @@ def DB(QUERY, arg1, arg2, result):
         c.execute(QUERY, (arg1, arg2, ))
     conn.commit()
     # if the result the rows are fetched
-    while True:
-        if (result) == None:
-            break
-        else:
-            result = c.fetchall()
-            return result
+    try:
+        result = c.fetchall()
+        return result
+    except psycopg2.ProgrammingError, e:
+        error = e
+        while True:
+            if (error) == None:
+                break
             break
     conn.close()
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    DB('delete from standings', None, None, None)
+    DB('delete from standings')
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
 
-    DB('delete from standings', None, None, None)
+    DB('delete from standings')
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
 
-    total_players = DB('select count(player_id) from standings', None, None, 1)
-
+    total_players =
+    DB('select count(player_id) from standings', result='yes')
     return total_players[0][0]
 
 
@@ -66,10 +68,7 @@ def registerPlayer(fullname):
         name: the player's full name (need not be unique).
     """
     playerID = DB('''insert into standings (fullname) values (%s)
-        returning player_id''', fullname, None, 1)
-    # Also inserting players into the byestatus table
-    DB('''insert into byestatus (player_id) values (%s)''',
-        playerID[0][0], None, None)
+        returning player_id''', arg1=fullname, result='yes')
 
 
 def playerStandings():
@@ -84,7 +83,7 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     # returning the list of players and their standings
-    standings = DB('select * from standings order by wins desc', None, None, 1)
+    standings = DB('select * from standings order by wins desc', result='yes')
     return standings
 
 
@@ -94,13 +93,12 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    # updating the winner record for every round
+    # recording wins, loses and total matches played
     DB('''update standings set wins = wins + 1, matches = matches + 1 where
-        player_id = %s''', winner, None, None)
+        player_id = %s''', arg1=winner)
 
-    # updating the loser record for every round
-    DB('''update standings set matches = matches + 1 where player_id = %s''',
-        loser, None, None)
+    DB('''update standings set matches = matches + 1 where
+        player_id = %s''', arg1=loser)
 
 
 def swissPairings():
@@ -119,7 +117,7 @@ def swissPairings():
     # Getting a list of players and their standings
     player_list = playerStandings()
     swiss_pairs = []
-    # making the SQL list and making pairs
+    # mtking the SQL list and making pairs
     for i in range(0, countPlayers(), 2):
         pair = (player_list[i][0], player_list[i][1], player_list[i+1][0],
                 player_list[i+1][1])
