@@ -20,10 +20,34 @@ create database tournament;
 
 \c tournament;
 
-drop table if exists standings cascade;
+drop table if exists players cascade;
 
-create table if not exists standings(
+create table if not exists players(
 player_id serial primary key unique,
-fullname text not null,
-wins integer DEFAULT 0,
-matches integer DEFAULT 0);
+fullname text not null);
+
+drop table if exists matches cascade;
+
+create table if not exists matches(
+match_id serial primary key	unique,
+p1 integer references players (player_id) ON DELETE CASCADE,
+p2 integer references players (player_id) ON DELETE CASCADE);
+
+create view total_matches as
+	select p.player_id, count(m.match_id) as total_matches
+	from matches as m join players as p
+	on p.player_id = m.p1 or p.player_id = m.p2
+	group by p.player_id;
+
+create view wins as 
+	select p.player_id, count(m.match_id) as wins 
+	from players as p join matches as m
+	on p.player_id = m.p1
+	group by p.player_id;
+
+create view standings as
+	select p.player_id, p.fullname, coalesce(w.wins,'0') as wins, coalesce(tm.total_matches,'0') as matches
+	from total_matches as tm full outer join wins as w 
+	on tm.player_id = w.player_id full outer join players as p  
+	on p.player_id = tm.player_id 
+	order by w.wins desc;

@@ -44,20 +44,19 @@ def DB(QUERY, arg1=None, arg2=None, result=None):
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    DB('delete from standings')
+    DB('delete from matches')
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
 
-    DB('delete from standings')
+    DB('delete from players')
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
+    total_players = DB('select count(player_id) from players', result='yes')
 
-    total_players =
-    DB('select count(player_id) from standings', result='yes')
     return total_players[0][0]
 
 
@@ -67,7 +66,7 @@ def registerPlayer(fullname):
     Args:
         name: the player's full name (need not be unique).
     """
-    playerID = DB('''insert into standings (fullname) values (%s)
+    playerID = DB('''insert into players (fullname) values (%s)
         returning player_id''', arg1=fullname, result='yes')
 
 
@@ -83,7 +82,7 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     # returning the list of players and their standings
-    standings = DB('select * from standings order by wins desc', result='yes')
+    standings = DB('select * from standings', result='yes')
     return standings
 
 
@@ -94,11 +93,8 @@ def reportMatch(winner, loser):
       loser:  the id number of the player who lost
     """
     # recording wins, loses and total matches played
-    DB('''update standings set wins = wins + 1, matches = matches + 1 where
-        player_id = %s''', arg1=winner)
-
-    DB('''update standings set matches = matches + 1 where
-        player_id = %s''', arg1=loser)
+    DB('''insert into matches (p1,p2) values (%s,%s)''',
+        arg1=winner, arg2=loser)
 
 
 def swissPairings():
@@ -117,7 +113,7 @@ def swissPairings():
     # Getting a list of players and their standings
     player_list = playerStandings()
     swiss_pairs = []
-    # mtking the SQL list and making pairs
+    # making the SQL list and making pairs
     for i in range(0, countPlayers(), 2):
         pair = (player_list[i][0], player_list[i][1], player_list[i+1][0],
                 player_list[i+1][1])
