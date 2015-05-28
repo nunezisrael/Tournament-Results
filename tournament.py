@@ -29,16 +29,13 @@ def DB(QUERY, arg1=None, arg2=None, result=None):
     else:
         c.execute(QUERY, (arg1, arg2, ))
     conn.commit()
-    # if the result the rows are fetched
+    # Fetching the rows, if the result is 'None' or empty just ignore it.
     try:
         result = c.fetchall()
         return result
-    except psycopg2.ProgrammingError, e:
-        error = e
-        while True:
-            if (error) == None:
-                break
-            break
+        conn.close()
+    except psycopg2.ProgrammingError:
+        pass
     conn.close()
 
 

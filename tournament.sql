@@ -34,20 +34,20 @@ p1 integer references players (player_id) ON DELETE CASCADE,
 p2 integer references players (player_id) ON DELETE CASCADE);
 
 create view total_matches as
-	select p.player_id, count(m.match_id) as total_matches
-	from matches as m join players as p
-	on p.player_id = m.p1 or p.player_id = m.p2
-	group by p.player_id;
+	SELECT p.player_id, count(m.match_id) as total_matches
+	FROM matches as m join players as p
+	ON p.player_id = m.p1 or p.player_id = m.p2
+	GROUP BY p.player_id;
 
 create view wins as 
-	select p.player_id, count(m.match_id) as wins 
-	from players as p join matches as m
-	on p.player_id = m.p1
-	group by p.player_id;
+	SELECT p.player_id, count(m.match_id) as wins 
+	FROM players as p join matches as m
+	ON p.player_id = m.p1
+	GROUP BY p.player_id;
 
 create view standings as
-	select p.player_id, p.fullname, coalesce(w.wins,'0') as wins, coalesce(tm.total_matches,'0') as matches
-	from total_matches as tm full outer join wins as w 
-	on tm.player_id = w.player_id full outer join players as p  
-	on p.player_id = tm.player_id 
-	order by w.wins desc;
+	SELECT p.player_id, p.fullname, coalesce(w.wins,'0') as wins, coalesce(tm.total_matches,'0') as matches
+	FROM total_matches as tm full outer join wins as w 
+	ON tm.player_id = w.player_id full outer join players as p  
+	ON p.player_id = tm.player_id 
+	ORDER BY w.wins desc;
