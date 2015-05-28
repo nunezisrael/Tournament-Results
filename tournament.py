@@ -33,9 +33,10 @@ def DB(QUERY, arg1=None, arg2=None, result=None):
     try:
         result = c.fetchall()
         return result
-        conn.close()
     except psycopg2.ProgrammingError:
         pass
+    finally:
+        conn.close()
     conn.close()
 
 
