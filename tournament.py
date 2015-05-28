@@ -32,11 +32,10 @@ def DB(QUERY, arg1=None, arg2=None, result=None):
     # Fetching the rows, if the result is 'None' or empty just ignore it.
     try:
         result = c.fetchall()
+        conn.close()
         return result
     except psycopg2.ProgrammingError:
         pass
-    finally:
-        conn.close()
     conn.close()
 
 
